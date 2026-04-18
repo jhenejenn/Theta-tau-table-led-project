@@ -1,0 +1,38 @@
+#include <FastLED.h>
+
+#define NUM_LED 90
+#define LED_PIN 6
+
+CRGB leds[NUM_LED];
+
+CRGB red  = CRGB(0x8B0000);
+CRGB gold = CRGB(0xFFD700);
+
+void setup() {
+  FastLED.addLeds<WS2812B, LED_PIN, GRB>(leds, NUM_LED);
+  FastLED.setBrightness(80);
+
+  for (int i = 0; i < NUM_LED; i++) {
+    leds[i] = red;
+  }
+  FastLED.show();
+}
+
+void loop() {
+  fadeToBlackBy(leds, NUM_LED, 25);
+
+  for (int i = 0; i < NUM_LED; i++) {
+    if (leds[i].r < red.r) leds[i].r = red.r;
+  }
+
+  int sparkPos = random(NUM_LED);
+  leds[sparkPos] = gold;
+
+  if (random8() < 80) {
+    int sparkPos2 = random(NUM_LED);
+    leds[sparkPos2] = gold;
+  }
+
+  FastLED.show();
+  delay(60);
+}
